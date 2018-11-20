@@ -1,11 +1,8 @@
-/*
-  PWS praktische opdracht. Autonome auto code van Yasin Tas uit 5Ha.
-*/
 //Libraries.
 #include <NewPing.h>
 
 //Variables.
-int Fwd = false;
+bool Fwd = false;
 int Left = 5;
 int Right = 4;
 int Forwards = 3;
@@ -19,10 +16,9 @@ int speed = 0;
 #define TRIGGER_PIN3  9 //Right
 #define ECHO_PIN3 10
 #define MAX_DISTANCE 200
-#define MAX_DISTANCEF 1000
 
 //Name of the objects.
-NewPing sonar1(TRIGGER_PIN1, ECHO_PIN1, MAX_DISTANCEF);//Front
+NewPing sonar1(TRIGGER_PIN1, ECHO_PIN1, MAX_DISTANCE);//Front
 NewPing sonar2(TRIGGER_PIN2, ECHO_PIN2, MAX_DISTANCE);//Left
 NewPing sonar3(TRIGGER_PIN3, ECHO_PIN3, MAX_DISTANCE);//Right
 
@@ -53,7 +49,6 @@ void loop() {
   delay(50);
 
   //Values for driving
-  int Fwd;
   if (distanceF > 50 ) {
     Fwd = true;
     Serial.print("true");
@@ -69,6 +64,9 @@ void loop() {
     fwdRight();
   }
   delay(50);
+  if (distanceF == false) {
+    bwd();
+  }
 }
 void fwdLeft() {
   digitalWrite(Forwards, HIGH);
@@ -88,3 +86,10 @@ void Stp() {
   digitalWrite(Left, LOW);
   digitalWrite(Right, LOW);
 }
+void bwd() {
+  digitalWrite(Forwards, LOW);
+  digitalWrite(Backwards, HIGH);
+  digitalWrite(Left, LOW);
+  digitalWrite(Right, LOW);
+}
+
