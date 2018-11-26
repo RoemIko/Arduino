@@ -2,13 +2,14 @@
 #include <NewPing.h>
 
 //Variables.
-bool Fwd = false;
+bool Fwd;
 int Left = 5;
 int Right = 4;
 int Forwards = 3;
 int Backwards = 2;
 int potPin = A0;
 int speed = 0;
+#define SONAR_NUM 3
 #define TRIGGER_PIN1 11 //Front 
 #define ECHO_PIN1 12
 #define TRIGGER_PIN2 7 //Left
@@ -18,10 +19,13 @@ int speed = 0;
 #define MAX_DISTANCE 200
 
 //Name of the objects.
-NewPing sonar1(TRIGGER_PIN1, ECHO_PIN1, MAX_DISTANCE);//Front
-NewPing sonar2(TRIGGER_PIN2, ECHO_PIN2, MAX_DISTANCE);//Left
-NewPing sonar3(TRIGGER_PIN3, ECHO_PIN3, MAX_DISTANCE);//Right
+NewPing sonar[SONAR_NUM] = {
+  NewPing(TRIGGER_PIN1, ECHO_PIN1, MAX_DISTANCE),
+  NewPing(TRIGGER_PIN2, ECHO_PIN2, MAX_DISTANCE),
+  NewPing(TRIGGER_PIN3, ECHO_PIN3, MAX_DISTANCE)
+};
 
+long sensors[3];
 //Start of the program.
 void setup() {
   Serial.begin(9600);
@@ -33,40 +37,34 @@ void setup() {
 
 //During the program.
 void loop() {
+  for (uint8_t i = 0; i < SONAR_NUM; i++) { // Loop through each sensor and display results.
+    delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
+    sensors[i] = sonar[i].ping_cm(); 
+  }
+
   //Value of the potentiometer
   speed = analogRead(potPin);
   speed = map(speed, 0, 1023, 0, 179);
-  Serial.print(speed);
-
-  //Sensor
-  unsigned int distanceF = sonar1.ping_cm();//Front
-  unsigned int distanceL = sonar2.ping_cm();//Left
-  unsigned int distanceR = sonar3.ping_cm();//Right
-  Serial.print(distanceF);
-  Serial.print(distanceL);
-  Serial.print(distanceR);
-  Serial.print("cm");
-  delay(50);
 
   //Values for driving
-  if (distanceF > 50 ) {
+  if (sensors[0] > 20 ) {
     Fwd = true;
-    Serial.print("true");
+    //Serial.print(Fwd);
   } else {
     Fwd = false;
-    Serial.print("false");
-    Stp();
+    //Serial.print(Fwd);
   }
   delay(50);
-  if ((distanceF == true) && (distanceL > distanceR)) {
+ if ((Fwd == true) && (sensors[1] > sensors[2])) {
     fwdLeft();
-  } else if ((distanceF == true) && (distanceR > distanceL)){
+  } else if ((Fwd == true) && (sensors[2] > sensors[1])){
     fwdRight();
   }
   delay(50);
-  if (distanceF == false) {
+  if (Fwd == false) {
     bwd();
   }
+  Serial.println(sensors[2]);
 }
 void fwdLeft() {
   digitalWrite(Forwards, HIGH);
