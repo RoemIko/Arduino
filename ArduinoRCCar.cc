@@ -28,7 +28,7 @@ NewPing sonar[SONAR_NUM] = {
 long sensors[3]; //Makesalist of the sensor values and stores them in there so it can recall it back
 //Start of the program.
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(9600); // setting the serial monitor
   pinMode(Left, OUTPUT); //setting the output of the pins
   pinMode(Right, OUTPUT);
   pinMode(Forwards, OUTPUT);
@@ -55,16 +55,17 @@ void loop() {
     Fwd = false;
     //Serial.print(Fwd);
   }
-  delay(50);
  if ((Fwd == true) && (sensors[1] > sensors[2])) { //if Fwd = true then AND left is bigger than right, then call the function. 
     fwdLeft();
   } else if ((Fwd == true) && (sensors[2] > sensors[1])){
     fwdRight();
   }
-  if (Fwd == false) {
+  if (Fwd == false) { //if Fwd = false, then stop driving and wait 1000ms drive back.
+    stp();
+    delay(1000);
     bwd();
   }
-  //Serial.println(sensors[2]);
+  //Serial.println(sensors[2]); 
 }
 //Functions to call back
 void fwdLeft() {
@@ -79,7 +80,7 @@ void fwdRight() {
   digitalWrite(Left, LOW);
   digitalWrite(Right, HIGH);
 }
-void Stp() {
+void stp() {
   digitalWrite(Forwards, LOW);
   digitalWrite(Backwards, LOW);
   digitalWrite(Left, LOW);
