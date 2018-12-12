@@ -37,15 +37,15 @@ void setup() {
 
 //During the program.
 void loop() {
-  
+
   for (uint8_t i = 0; i < SONAR_NUM; i++) { // Loop through each sensor and display results.
     delay(50); // Wait 50ms between pings (about 20 pings/sec). 29ms should be the shortest delay between pings.
-    sensors[i] = sonar[i].ping_cm(); 
+    sensors[i] = sonar[i].ping_cm();
   }
 
   //Value of the potentiometer
   speed = analogRead(potPin); //reads the values of the pot meter. Sends off a signal of it
-  speed = map(speed, 0, 1023, 0, 179); 
+  speed = map(speed, 0, 1023, 0, 179);
 
   //Values for driving
   if (sensors[0] > 50 ) { //if the distance of the front sensor is higher than 50cm, than set Fwd true. Otherwise its false.
@@ -56,27 +56,31 @@ void loop() {
     //Serial.print(Fwd);
   }
   delay(50);
- if (Fwd == true) { //if Fwd = true then AND left is bigger than right, then call the function. 
+  if ((Fwd == true) && (sensors[1] > 50) && (sensors[2] > 50)) {
     fwd();
-  } else if ((Fwd == true) && (sensors[1] < 50)){
+  } else if ((Fwd == true) && (sensors[1] < 50)) {
     fwdRight();
-    } else if ((Fwd == true) && (sensors[2] < 50)){
+  } else if ((Fwd == true) && (sensors[2] < 50)) {
     fwdLeft();
-      } else if ((Fwd == false) && (sensors[1] <50) && (sensors[2] < 50)){
-      Stp();
-        } else if ((Fwd == false) && (sensors[1] < 50)) {
-        bwdRight();
-          } else if ((Fwd == false) && sensors[2] < 50){
-            bwdRight();
-          } else {
-            Stp();
-            delay(1000);
-            bwd();
-          }
+  } else if ((Fwd == false) && (sensors[1] < 50) && (sensors[2] < 50)) {
+    Stp();
+  } else if ((Fwd == false) && (sensors[1] < 50)) {
+    bwdRight();
+  } else if ((Fwd == false) && sensors[2] < 50) {
+    bwdRight();
+  } else {
+    Stp();
+    delay(1000);
+    bwd();
+    delay(500);
+    bwdLeft();
+    delay(500);
+     bwdRight();
+  }
   //Serial.println(sensors[2]);
 }
 //Functions to call back
-void fwd(){
+void fwd() {
   digitalWrite(Forwards, speed);
   digitalWrite(Backwards, LOW);
   digitalWrite(Left, LOW);
