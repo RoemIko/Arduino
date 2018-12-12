@@ -70,14 +70,9 @@ void loop() {
             bwdRight();
           } else {
             Stp();
-            delay(9000);
-            Serial.print("No if statement for this was found");
+            delay(1000);
+            bwd();
           }
-  if (Fwd == false) {
-    Stp();
-    delay(1000);
-    bwd();
-  }
   //Serial.println(sensors[2]);
 }
 //Functions to call back
