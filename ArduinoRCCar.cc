@@ -1,4 +1,4 @@
-a//Libraries.
+//Libraries.
 #include <NewPing.h>
 
 //Variables.
