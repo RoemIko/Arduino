@@ -65,22 +65,22 @@ void loop() {
       fwd();
     }
   }
-  if (Fwd == false) {
-    if (sensors[1] < 50){
-      bwdRight();
-    } else if (sensors[2] < 50){
-      bwdLeft();
-    }else if (sensors[1] && (sensors[2] < 50){
-      stp();
-    } else {
-      bwd();
-      delay(1000);
-      bwdLeft();
-      delay(500);
-      bwdRight();
-      delay(50);
+    if (Fwd == false) {
+      if (sensors[1] < 50){
+        bwdRight();
+      } else if (sensors[2] < 50){
+        bwdLeft();
+      } else if ((sensors[1] < 50) && (sensors[2] < 50)){
+        stp();
+      } else {
+        bwd();
+        delay(1000);
+        bwdLeft();
+        delay(500);
+        bwdRight();
+        delay(50);
+      }
     }
-  }
   //Serial.println(sensors[2]);
 }
 //Functions to call back
