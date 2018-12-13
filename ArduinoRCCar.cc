@@ -48,7 +48,7 @@ void loop() {
   speed = map(speed, 0, 1023, 0, 179);
 
   //Values for driving
-  if (sensors[0] > 50 ) { //if the distance of the front sensor is higher than 50cm, than set Fwd true. Otherwise its false.
+  if (sensors[0] >= 50 ) { //if the distance of the front sensor is higher than 50cm, than set Fwd true. Otherwise its false.
     Fwd = true;
     //Serial.print(Fwd);
   } else {
