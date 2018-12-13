@@ -48,7 +48,7 @@ void loop() {
   speed = map(speed, 0, 1023, 0, 179);
 
   //Values for driving
-  if (sensors[0] > 50 ) { //if the distance of the front sensor is higher than 50cm, than set Fwd true. Otherwise its false.
+  if (sensors[0] >= 50 ) { //if the distance of the front sensor is higher than 50cm, than set Fwd true. Otherwise its false.
     Fwd = true;
     //Serial.print(Fwd);
   } else {
@@ -56,26 +56,30 @@ void loop() {
     //Serial.print(Fwd);
   }
   delay(50);
-  if ((Fwd == true) && (sensors[1] > 50) && (sensors[2] > 50)) {
-    fwd();
-  } else if ((Fwd == true) && (sensors[1] < 50)) {
-    fwdRight();
-  } else if ((Fwd == true) && (sensors[2] < 50)) {
-    fwdLeft();
-  } else if ((Fwd == false) && (sensors[1] < 50) && (sensors[2] < 50)) {
-    Stp();
-  } else if ((Fwd == false) && (sensors[1] < 50)) {
-    bwdRight();
-  } else if ((Fwd == false) && sensors[2] < 50) {
-    bwdRight();
-  } else {
-    Stp();
-    delay(1000);
-    bwd();
-    delay(500);
-    bwdLeft();
-    delay(500);
-     bwdRight();
+  if (Fwd == true){
+    if (sensors[1] < 50){
+      fwdRight();
+    } else if (sensors[2] < 50){
+      fwdLeft();
+    } else {
+      fwd();
+    }
+  }
+  if (Fwd == false) {
+    if (sensors[1] < 50){
+      bwdRight();
+    } else if (sensors[2] < 50){
+      bwdLeft();
+    }else if (sensors[1] && (sensors[2] < 50){
+      stp();
+    } else {
+      bwd();
+      delay(1000);
+      bwdLeft();
+      delay(500);
+      bwdRight();
+      delay(50);
+    }
   }
   //Serial.println(sensors[2]);
 }
@@ -116,7 +120,7 @@ void bwdRight() {
   digitalWrite(Left, LOW);
   digitalWrite(Right, HIGH);
 }
-void Stp() {
+void stp() {
   digitalWrite(Forwards, LOW);
   digitalWrite(Backwards, LOW);
   digitalWrite(Left, LOW);
