@@ -56,23 +56,23 @@ void loop() {
     //Serial.print(Fwd);
   }
   delay(50);
-  if (Fwd == true){
-    if (sensors[1] < 50){
+  if (Fwd == true){ //If Fwd = true then the next line of code will be scrolled through.
+    if (sensors[1] < 50){ //Fwd = true, but if left sensor is < 50cm then go right.
       fwdRight();
-    } else if (sensors[2] < 50){
+    } else if (sensors[2] < 50){//If right sensor < 50 then go left.
       fwdLeft();
-    } else {
+    } else {//if none of the condidtions for Fwd = true is met keep going forward
       fwd();
     }
   }
-    if (Fwd == false) {
-      if (sensors[1] < 50){
-        bwdRight();
-      } else if (sensors[2] < 50){
+    if (Fwd == false) {//If Fwd = false then call this If statement
+      if (sensors[1] < 50){//Same as above except backwards
         bwdLeft();
-      } else if ((sensors[1] < 50) && (sensors[2] < 50)){
+      } else if (sensors[2] < 50){
+        bwdRight();
+      } else if ((sensors[1] < 50) && (sensors[2] < 50)){//If both sensors get obscured come to a full stop
         stp();
-      } else {
+      } else {//If none of the condidtions are met then go back, wait, backleft, wait, backright
         bwd();
         delay(1000);
         bwdLeft();
@@ -84,43 +84,43 @@ void loop() {
   //Serial.println(sensors[2]);
 }
 //Functions to call back
-void fwd() {
+void fwd() {  //Forwards
   digitalWrite(Forwards, speed);
   digitalWrite(Backwards, LOW);
   digitalWrite(Left, LOW);
   digitalWrite(Right, LOW);
 }
-void fwdLeft() {
+void fwdLeft() { //Forward Left
   digitalWrite(Forwards, speed);
   digitalWrite(Backwards, LOW);
   digitalWrite(Left, HIGH);
   digitalWrite(Right, LOW);
 }
-void fwdRight() {
+void fwdRight() { //Forward right
   digitalWrite(Forwards, speed);
   digitalWrite(Backwards, LOW);
   digitalWrite(Left, LOW);
   digitalWrite(Right, HIGH);
 }
-void bwd() {
+void bwd() { //Backwards
   digitalWrite(Forwards, LOW);
   digitalWrite(Backwards, speed);
   digitalWrite(Left, LOW);
   digitalWrite(Right, LOW);
 }
-void bwdLeft() {
+void bwdLeft() { //Backwards left
   digitalWrite(Forwards, LOW);
   digitalWrite(Backwards, speed);
   digitalWrite(Left, HIGH);
   digitalWrite(Right, LOW);
 }
-void bwdRight() {
+void bwdRight() { //Backwards right
   digitalWrite(Forwards, LOW);
   digitalWrite(Backwards, speed);
   digitalWrite(Left, LOW);
   digitalWrite(Right, HIGH);
 }
-void stp() {
+void stp() { //Full stop
   digitalWrite(Forwards, LOW);
   digitalWrite(Backwards, LOW);
   digitalWrite(Left, LOW);
